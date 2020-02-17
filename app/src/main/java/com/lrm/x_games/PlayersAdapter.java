@@ -1,15 +1,19 @@
 package com.lrm.x_games;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -39,15 +43,40 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
         holder.score.setText(list.get(position).getScore());
         holder.team.setText(list.get(position).getTeam());
 
-        if(position%2==0){
-            holder.profile_image.setImageResource(R.drawable.profile);
-        }else
-            holder.profile_image.setImageResource(R.drawable.profiledemo);
+
+        String profurl =c.getResources().getString(R.string.hostnoport) + "/images/users/" + list.get(position).getEid() + ".jpg";
+        Picasso.get().load(profurl).into(holder.profile_image);
 
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(c, "We are editing this player", Toast.LENGTH_SHORT).show();
+                View view = LayoutInflater.from(c).inflate(R.layout.editor,null);
+                AlertDialog.Builder alert = new AlertDialog.Builder(c);
+                TextView tv_uname = view.findViewById(R.id.tv_uname);
+                TextView tv_team = view.findViewById(R.id.tv_team);
+                TextView tv_score = view.findViewById(R.id.tv_score);
+                Button btn_addscore = view.findViewById(R.id.btn_addscore);
+
+                tv_uname.setText(list.get(position).getName());
+                tv_team.setText(list.get(position).getTeam());
+                tv_score.setText(list.get(position).getScore());
+
+                CircleImageView profile_image = view.findViewById(R.id.profile_image);
+
+                String profurl =c.getResources().getString(R.string.hostnoport) + "/images/users/" + list.get(position).getEid() + ".jpg";
+                Picasso.get().load(profurl).into(profile_image);
+
+
+
+                btn_addscore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(c, "update score here", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                alert.setView(view);
+                alert.show();
             }
         });
 

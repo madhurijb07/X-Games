@@ -5,6 +5,7 @@
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_owner_panel">OwnerPanelActivity</string>
     <string name="host">http://10.10.10.112:8081</string>
+    <string name="hostnoport">http://10.10.10.112</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_team_profile">TeamProfileActivity</string>
     <string name="title_activity_drawer_demo">DrawerDemo</string>

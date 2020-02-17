@@ -30,8 +30,11 @@ import com.azoft.carousellayoutmanager.CenterScrollListener
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.view.DragEvent
 import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.content_profile.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -52,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         var loader = Loader(this)
         val view = LayoutInflater.from(this).inflate(R.layout.nonet,null)
-        val tryagain = view.findViewById<Button>(R.id.btn_tryagain)
+        val tryagain:Button = view.findViewById<Button>(R.id.btn_tryagain)
         val close = view.findViewById<ImageView>(R.id.iv_close)
         close.setOnClickListener {
             finish()
@@ -74,10 +77,16 @@ class MainActivity : AppCompatActivity() {
         iv_notification.setOnClickListener {
             startActivity(Intent(this,MyNotificationsActivity::class.java))
         }
+
         iv_drawer.setOnClickListener {
             drawerlayout.openDrawer()
+
         }
 
+        val profurl =getResources().getString(R.string.hostnoport) + "/images/users/" + StaticProfileData.eid + ".jpg"
+        Picasso.get().load(profurl).into(iv_profile)
+        tv_uname.setText(StaticProfileData.name)
+        tv_points.setText(StaticProfileData.score+" Points")
 
         //Drawer Layout menu operations
         var drawerLayout = findViewById<DuoDrawerLayout>(R.id.drawerlayout);
@@ -126,6 +135,7 @@ class MainActivity : AppCompatActivity() {
         val teamsAdapter = TeamsAdapter(this,R.layout.teamslist,teams);
 
 
+/*
         teams.add(Teams("404 Warriors","150","demo"))
         teams.add(Teams("PubGunners","200","demo"))
         teams.add(Teams("Chennai Super Kings","400","demo"))
@@ -134,7 +144,7 @@ class MainActivity : AppCompatActivity() {
         teams.add(Teams("Rising Pune Supergiants","300","demo"))
         teams.add(Teams("Delhi Derdevils","400","demo"))
         teams.add(Teams("Kings 11 Punjab","500","demo"))
-        teams.add(Teams("Rajasthan Royals","0","demo"))
+        teams.add(Teams("Rajasthan Royals","0","demo"))*/
 
 
         teamsAdapter.notifyDataSetChanged()
@@ -155,6 +165,8 @@ class MainActivity : AppCompatActivity() {
 
                 if(nalert!=null&&nnet==1)
                     nalert!!.dismiss()
+
+
 
 
                 loader.Dismisser()

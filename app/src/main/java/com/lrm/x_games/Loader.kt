@@ -14,6 +14,11 @@ class Loader(private val c:Context) {
     }
 
     fun Dismisser(){
-        alert.dismiss()
+        if(alert.isShowing)
+            try {
+                alert.dismiss()
+            }catch (e:Exception){
+
+            }
     }
 }
