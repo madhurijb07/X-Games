@@ -1,6 +1,7 @@
 package com.lrm.x_games;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import java.util.List;
+
 
 public class TeamsAdapter extends ArrayAdapter<Teams> {
     Context context;
@@ -31,14 +34,14 @@ public class TeamsAdapter extends ArrayAdapter<Teams> {
         TextView tname = v.findViewById(R.id.tv_team_name);//as TextView
         TextView tscore = v.findViewById(R.id.tv_team_score);//as TextView
         ImageView tlogo = v.findViewById(R.id.iv_team_logo);//as ImageView
-        if(position==2){
+        Teams team = getItem(position);
+        if(team.getTid().equals(StaticProfileData.team)){
             LinearLayout ll = v.findViewById(R.id.ll);
             tname.setTextColor(Color.parseColor("#FFFFFF"));
-            tscore.setTextColor(Color.parseColor("FFFFFF"));
-            ll.setBackgroundColor(Color.parseColor("#FF8BC34A"));
+            tscore.setTextColor(Color.parseColor("#FFFFFF"));
+            ll.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
         }
 
-        Teams team = getItem(position);
 
         tname.setText(team.getName());
         tscore.setText(team.getScore());

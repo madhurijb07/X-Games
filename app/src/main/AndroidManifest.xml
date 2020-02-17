@@ -2,16 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lrm.x_games">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
+        android:configChanges="uiMode"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:configChanges="uiMode">
+        android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".Splash"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -20,6 +22,45 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AdminPanelActivity"
+            android:label="@string/title_activity_admin_panel"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MyNotificationsActivity"
+            android:label="@string/title_activity_my_notifications"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DrawerDemoNew"
+            android:label="@string/title_activity_drawer_demo_new"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DrawerDemo"
+            android:label="@string/title_activity_drawer_demo"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".TeamProfileActivity"
+            android:label="@string/title_activity_team_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".OwnerPanelActivity"
+            android:label="@string/title_activity_owner_panel"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode = "singleTop"/>
     </application>
 
 </manifest>

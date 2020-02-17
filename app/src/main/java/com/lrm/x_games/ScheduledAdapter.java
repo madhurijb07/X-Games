@@ -35,7 +35,7 @@ public class ScheduledAdapter extends RecyclerView.Adapter<ScheduledAdapter.View
         holder.title.setText(list.get(position).getTitle());
 
     }
-
+    
     @Override
     public int getItemCount() {
         return list.size();
@@ -45,7 +45,7 @@ public class ScheduledAdapter extends RecyclerView.Adapter<ScheduledAdapter.View
         TextView title;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.tv_title);
+            title = itemView.findViewById(R.id.tv_status);
         }
     }
 }

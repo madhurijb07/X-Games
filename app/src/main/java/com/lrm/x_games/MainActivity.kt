@@ -1,58 +1,47 @@
 package com.lrm.x_games
 
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import kotlinx.android.synthetic.main.content_main.*
-import androidx.core.app.ActivityCompat.startActivityForResult
 import android.content.Intent
-import android.content.res.Configuration
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import com.google.android.gms.tasks.Task
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import com.google.android.gms.common.api.ApiException
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import com.google.android.material.internal.ContextUtils.getActivity
-import androidx.annotation.NonNull
-import com.google.android.gms.tasks.OnCompleteListener
+import android.view.LayoutInflater
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.Volley
+import com.azoft.carousellayoutmanager.CarouselLayoutManager
+import kotlinx.android.synthetic.main.menu.*
+import nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout
+import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle
+import org.json.JSONArray
+import java.util.*
+import com.azoft.carousellayoutmanager.CenterScrollListener
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.net.Uri
-import android.widget.LinearLayout
-import android.widget.ListView
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.squareup.picasso.Picasso
+import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener
+import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : AppCompatActivity() {
 
-    var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestEmail()
-        .build()
-
-
-    var mGoogleSignInClient:GoogleSignInClient?=null
-    var account:GoogleSignInAccount? = null
     var list:ArrayList<ScheduledData>?= ArrayList<ScheduledData>()
 
+    var nonet: AlertDialog.Builder? = null
+    var nalert:AlertDialog?=null
+
+    var nnet = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,82 +49,160 @@ class MainActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); //For night mode theme
 
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        //Checking if already signed in
-        account = GoogleSignIn.getLastSignedInAccount(this);
+        var loader = Loader(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.nonet,null)
+        val tryagain = view.findViewById<Button>(R.id.btn_tryagain)
+        val close = view.findViewById<ImageView>(R.id.iv_close)
+        close.setOnClickListener {
+            finish()
+        }
+        tryagain.setOnClickListener {
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
+        }
+        nonet = AlertDialog.Builder(this).setView(view)
+
+       /* tv_uname.text =  StaticProfileData.name
+        tv_score.text = StaticProfileData.score
+*/
+
+        iv_closer.setOnClickListener {
+            drawerlayout.closeDrawer()
+        }
+
+        iv_notification.setOnClickListener {
+            startActivity(Intent(this,MyNotificationsActivity::class.java))
+        }
+        iv_drawer.setOnClickListener {
+            drawerlayout.openDrawer()
+        }
 
 
-        list!!.add(ScheduledData("Mallinath"))
-        list!!.add(ScheduledData("Mallinath"))
-        list!!.add(ScheduledData("Mallinath"))
-        list!!.add(ScheduledData("Mallinath"))
-        list!!.add(ScheduledData("Mallinath"))
+        //Drawer Layout menu operations
+        var drawerLayout = findViewById<DuoDrawerLayout>(R.id.drawerlayout);
+        var drawerToggle = DuoDrawerToggle(this, drawerLayout, null,
+        R.string.navigation_drawer_open,
+        R.string.navigation_drawer_close)
+
+        drawerLayout.setDrawerListener(drawerToggle)
+        drawerToggle.syncState()
+
+
+        my_profile.setOnClickListener {
+            var intent = Intent(this,ProfileActivity::class.java)
+            intent.putExtra("eid",StaticProfileData.eid)
+            startActivity(intent)
+        }
+
+
+        //END of Drawer layout menu operations
+
+        list!!.add(ScheduledData("• Live"))
+        list!!.add(ScheduledData("• Live"))
+        list!!.add(ScheduledData("Scheduled"))
+        list!!.add(ScheduledData("Scheduled"))
+        list!!.add(ScheduledData("Scheduled"))
+        list!!.add(ScheduledData("Scheduled"))
+        list!!.add(ScheduledData("Scheduled"))
 
         val ScheduledAdapter = ScheduledAdapter(this,list);
-        rv_schedule.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        var layoutManager = CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
+
+        rv_schedule.setLayoutManager(layoutManager);
+        rv_schedule.setHasFixedSize(true);
+        rv_schedule.addOnScrollListener(CenterScrollListener())
+        layoutManager.setPostLayoutListener(CarouselZoomPostLayoutListener());
+
         rv_schedule.adapter = ScheduledAdapter
 
 
+
+
         val teams = ArrayList<Teams>()
-        teams.add(Teams("PubGunners","150"))
-        teams.add(Teams("PubGunners","150"))
-        teams.add(Teams("PubGunners","150"))
-        teams.add(Teams("PubGunners","150"))
-        teams.add(Teams("PubGunners","150"))
+        var queue = Volley.newRequestQueue(this)
+        var url = getResources().getString(R.string.host)+"/xgames/team/all"
+
         val teamsAdapter = TeamsAdapter(this,R.layout.teamslist,teams);
+
+
+        teams.add(Teams("404 Warriors","150","demo"))
+        teams.add(Teams("PubGunners","200","demo"))
+        teams.add(Teams("Chennai Super Kings","400","demo"))
+        teams.add(Teams("Mumbai Indians","600","demo"))
+        teams.add(Teams("Royal Challenger Bangalore","200","demo"))
+        teams.add(Teams("Rising Pune Supergiants","300","demo"))
+        teams.add(Teams("Delhi Derdevils","400","demo"))
+        teams.add(Teams("Kings 11 Punjab","500","demo"))
+        teams.add(Teams("Rajasthan Royals","0","demo"))
+
+
         teamsAdapter.notifyDataSetChanged()
 
-        val lv = findViewById(R.id.lv_teamlist) as ListView
+        adminpanel.setOnClickListener {
+            startActivity(Intent(this,AdminPanelActivity::class.java))
+        }
+        leaderboard.setOnClickListener {
+            Snackbar.make(it,"Coming soon...",Snackbar.LENGTH_LONG).setTextColor(resources.getColor(R.color.colorAccent)).show()
+        }
+        dashboard.setOnClickListener {
+            Snackbar.make(it,"Coming soon...",Snackbar.LENGTH_LONG).setTextColor(resources.getColor(R.color.colorAccent)).show()
+        }
+        val request = JsonArrayRequest(Request.Method.GET, url, null,
+            Response.Listener<JSONArray> { response ->
+                var jArray = JSONArray(response.toString())
+                val i  = 0
+
+                if(nalert!=null&&nnet==1)
+                    nalert!!.dismiss()
+
+
+                loader.Dismisser()
+                for(i in 0 until jArray.length()) {
+                    var team = jArray.getJSONObject(i)
+                    var name = team.getString("teamName")
+                    var id = team.getString("teamId");
+                    teams.add(Teams(name,id,id))
+                    teamsAdapter.notifyDataSetChanged()
+
+                }
+
+            },
+            Response.ErrorListener {
+                System.out.println(it)
+                if(nalert==null)
+                    nalert = nonet!!.show()
+                    nnet = 1
+            })
+
+
+        queue.add(request)
+
+        val lv = findViewById<ListView>(R.id.lv_teamlist)
 
         lv.adapter = teamsAdapter
 
-        accessAcc()
+        lv.setOnItemClickListener { parent, view, position, id ->
+            var team = parent.getItemAtPosition(position) as Teams
+            Toast.makeText(this,team.getTid(),Toast.LENGTH_LONG).show()
+        }
 
-    }
+        logout.setOnClickListener {
+            var alert = AlertDialog.Builder(this).setTitle("Are you sure??").setPositiveButton("Yes, sign me out",
+                DialogInterface.OnClickListener { dialog, which ->
+                    //clear preferences
+                    val sharedPreference = getSharedPreferences("LOGIN", Context.MODE_PRIVATE)
+                    var editor = sharedPreference.edit()
+                    editor.clear()
+                    editor.commit()
+                    startActivity(Intent(this,LoginActivity::class.java))
+                    finish()
+                }).setNegativeButton("No, keep me signed in",null).show()
 
-    private fun signOut() {
-        mGoogleSignInClient!!.signOut()
-            .addOnCompleteListener(this) {
-                finish()
-            }
-    }
-    var personName:String? = null
-    var personGivenName:String? = null
-    var personFamilyName:String? = null
-    var personEmail:String? = null
-    var personId:String? = null
-    var personPhoto: Uri? = null
-
-    public fun accessAcc(){
-        val acct = GoogleSignIn.getLastSignedInAccount(this)
-        if (acct != null) {
-            personName = acct.getDisplayName()
-            personGivenName = acct.getGivenName()
-            personFamilyName = acct.getFamilyName()
-            personEmail = acct.getEmail()
-            personId = acct.getId()
-            personPhoto = acct.getPhotoUrl()
-            var pic = personPhoto.toString()
-
-
-            Picasso.with(this).load(personPhoto.toString()).into(iv_profilepic)
-           // Picasso.with(this).load(personPhoto.toString()).into(iv_prof)
-          //  iv_prof.setImageURI(acct.photoUrl)
-            retriever()
-            tv_uname.setText(personName)
-
-            if(!personEmail!!.contains("leftrightmind.com",true)) {
-                Toast.makeText(this, "You are not the part of this championship", Toast.LENGTH_SHORT).show()
-                signOut()
-            }
-        }else{
-
-            val signInIntent:Intent = GoogleSignIn.getClient(this, gso).signInIntent
-            startActivityForResult(signInIntent, 100)
         }
 
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -154,37 +221,5 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
 
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == 100) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
-
-
-        }
-    }
-
-    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-            val account = completedTask.getResult(ApiException::class.java)
-
-            // Signed in successfully, show authenticated UI.
-            accessAcc()
-            Toast.makeText(this,"sign in success",Toast.LENGTH_SHORT).show()
-        } catch (e: ApiException) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Toast.makeText(this,"Sign in failed",Toast.LENGTH_SHORT).show()
-            finish()
-        }
-
-
-    }
-    public fun retriever(){
-
-    }
 }

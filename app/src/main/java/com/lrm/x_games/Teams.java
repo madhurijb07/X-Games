@@ -1,11 +1,20 @@
 package com.lrm.x_games;
 
 public class Teams {
-    String name,score;
+    String name,score,tid;
 
-    public Teams(String name, String score) {
+    public Teams(String name, String score, String tid) {
         this.name = name;
         this.score = score;
+        this.tid = tid;
+    }
+
+    public String getTid() {
+        return tid;
+    }
+
+    public void setTid(String tid) {
+        this.tid = tid;
     }
 
     public String getName() {
