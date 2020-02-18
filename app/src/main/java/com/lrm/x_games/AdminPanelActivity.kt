@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.content_admin_panel.*
 import org.json.JSONArray
 
 
+    var prg:Loader? = null
     class AdminPanelActivity : AppCompatActivity() {
 
     var list = ArrayList<Players>()
@@ -31,8 +32,8 @@ import org.json.JSONArray
             finish()
         }
 
-        var loader = Loader(this)
-        loader.Show()
+        prg = Loader(this)
+        prg!!.Show()
 
         val PlayersAdapter = PlayersAdapter(this,list);
 
@@ -47,14 +48,15 @@ import org.json.JSONArray
 
 
 
-                loader.Dismisser()
+                prg!!.Dismisser()
                 for(i in 0 until jArray.length()) {
                     var player = jArray.getJSONObject(i)
 
                     var uname = player.getString("fullName")
                     var eid = player.getString("playerId")
-                    var uteam = player.getString("playerId")
+                    var uteam = player.getString("teamId")
                     var score = player.getString("score")
+
 
                     list.add(Players(eid,uname,uteam,score))
                     PlayersAdapter.notifyDataSetChanged()
@@ -66,11 +68,8 @@ import org.json.JSONArray
             Response.ErrorListener {
                 System.out.println(it)
                 Toast.makeText(this,"Something went wrong",Toast.LENGTH_LONG).show()
+                finish()
             })
-
-        back.setOnClickListener {
-            finish()
-        }
 
         queue.add(request)
 

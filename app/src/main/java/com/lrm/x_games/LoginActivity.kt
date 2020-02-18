@@ -22,6 +22,7 @@ import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
+    var prg:Loader? = null
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
@@ -33,11 +34,8 @@ class LoginActivity : AppCompatActivity() {
             cv.setVisibility(View.VISIBLE)
 
         bt_login.setOnClickListener {
-            var progress = ProgressDialog(this)
-            progress.setTitle("Signing in")
 
-            var prg = Loader(this)
-            prg.Show()
+            prg = Loader(this)
 
 
             var eid = et_eid.getText().toString()
@@ -49,9 +47,9 @@ class LoginActivity : AppCompatActivity() {
                 et_epass.setError("Invalid Password Detected")
 
             if(eid.length>2&&pass.length>=9) {
-                progress.show()
                 StaticProfileData.eid = eid
                 //check eid in backend
+                prg!!.Show()
 
                 var queue = Volley.newRequestQueue(this)
                 var url = getResources().getString(R.string.host)+"/xgames/user/login/"+eid+"/"+pass
@@ -101,7 +99,7 @@ class LoginActivity : AppCompatActivity() {
                     Response.ErrorListener {
                         System.out.println(it)
                         Toast.makeText(this,"Invalid Username or password ",Toast.LENGTH_LONG).show()
-                        progress.dismiss()
+                        prg!!.Dismisser()
 
                     })
 

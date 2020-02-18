@@ -135,17 +135,6 @@ class MainActivity : AppCompatActivity() {
         val teamsAdapter = TeamsAdapter(this,R.layout.teamslist,teams);
 
 
-/*
-        teams.add(Teams("404 Warriors","150","demo"))
-        teams.add(Teams("PubGunners","200","demo"))
-        teams.add(Teams("Chennai Super Kings","400","demo"))
-        teams.add(Teams("Mumbai Indians","600","demo"))
-        teams.add(Teams("Royal Challenger Bangalore","200","demo"))
-        teams.add(Teams("Rising Pune Supergiants","300","demo"))
-        teams.add(Teams("Delhi Derdevils","400","demo"))
-        teams.add(Teams("Kings 11 Punjab","500","demo"))
-        teams.add(Teams("Rajasthan Royals","0","demo"))*/
-
 
         teamsAdapter.notifyDataSetChanged()
 
@@ -173,7 +162,7 @@ class MainActivity : AppCompatActivity() {
                 for(i in 0 until jArray.length()) {
                     var team = jArray.getJSONObject(i)
                     var name = team.getString("teamName")
-                    var id = team.getString("teamId");
+                    var id = team.getString("teamScore");
                     teams.add(Teams(name,id,id))
                     teamsAdapter.notifyDataSetChanged()
 
