@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "787519709155",
+    "firebase_url": "https://x-games-267907.firebaseio.com",
+    "project_id": "x-games-267907",
+    "storage_bucket": "x-games-267907.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787519709155:android:d912be8cfd2e835ffecad6",
+        "android_client_info": {
+          "package_name": "com.lrm.x_games"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787519709155-5ktfs25vh1ubkscdb7ej3i576sr3e4ft.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lrm.x_games",
+            "certificate_hash": "6099e9af031ea824cf4248322f4cd02ad37e12f2"
+          }
+        },
+        {
+          "client_id": "787519709155-l2vi781on01ue9qvgptq2jl07q5q828g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClbGQx5u5h3YIcgFPu-zjBNDScT2S8qJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787519709155-l2vi781on01ue9qvgptq2jl07q5q828g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

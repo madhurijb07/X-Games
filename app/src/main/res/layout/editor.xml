@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView12"
+        android:id="@+id/iv_close"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
@@ -102,7 +102,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/et_newscore"
+            android:id="@+id/et_addscore"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_marginRight="10dp"

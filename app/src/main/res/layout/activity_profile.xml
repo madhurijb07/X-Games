@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".System.MyNotificationsActivity">
+    tools:context=".System.ProfileActivity">
 
-    <include layout="@layout/content_my_notifications" />
+    <include layout="@layout/content_profile" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
