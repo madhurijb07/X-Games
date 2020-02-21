@@ -49,6 +49,7 @@
                 android:ems="10"
                 android:fontFamily="#segoeUI"
                 android:hint="Employee Id"
+                android:inputType="number"
                 android:textColor="@android:color/white"
                 android:textColorHint="#5E5E5E"
                 android:textSize="20dp" />

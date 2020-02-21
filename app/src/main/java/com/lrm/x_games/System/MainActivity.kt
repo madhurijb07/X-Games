@@ -103,12 +103,7 @@ class MainActivity : AppCompatActivity() {
         //END of Drawer layout menu operations
 
         list!!.add(ScheduledData("• Live"))
-        list!!.add(ScheduledData("• Live"))
-        list!!.add(ScheduledData("Scheduled"))
-        list!!.add(ScheduledData("Scheduled"))
-        list!!.add(ScheduledData("Scheduled"))
-        list!!.add(ScheduledData("Scheduled"))
-        list!!.add(ScheduledData("Scheduled"))
+
 
         val ScheduledAdapter = ScheduledAdapter(this, list);
         var layoutManager = CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
